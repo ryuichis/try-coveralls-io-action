@@ -35,8 +35,8 @@ jobs:
           sudo apt-get install -y lcov
           cd oclint
           lcov --capture --directory build/oclint-${MODULE}-test --output-file lcov.info
-          lcov --extract lcov.info '*oclint-${MODULE}/*' --output-file lcov.info
-          lcov --remove lcov.info '*oclint-${MODULE}/test*' --output-file lcov.info 
+          lcov --extract lcov.info "*oclint-${MODULE}/*" --output-file lcov.info
+          lcov --remove lcov.info "*oclint-${MODULE}/test*" --output-file lcov.info 
           lcov --list lcov.info 
         if:  matrix.module != 'driver'
       - name: Coveralls Parallel
