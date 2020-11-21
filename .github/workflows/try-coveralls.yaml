@@ -20,7 +20,13 @@ jobs:
           git clone https://github.com/ryuichis/oclint
           cd oclint
           git checkout use-system-llvm
-          cd oclint-scripts
-          ./gh-actions test core
+      - run: |
+          cd oclint/oclint-scripts
+          ./gh-actions test metrics
           cd ..
+      - env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+        run: |
+          pyenv rehash
+          cd oclint
           coveralls --gcov $(pwd)/build/llvm-install/bin/llvm-cov --gcov-options gcov --include oclint-core/ --exclude oclint-core/test
