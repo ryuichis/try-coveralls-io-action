@@ -3,17 +3,22 @@ on: [push, pull_request]
 
 jobs:
   cov:
-    runs-on: ubuntu-20.04
+    runs-on: macos-10.15
     steps:
       - uses: actions/checkout@v1
-      - run: sudo pip install --upgrade cpp-coveralls;
-      - env:
-          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-        run: |
+      - run: |
+          sudo xcode-select -s /Applications/Xcode_12.2.app/Contents/Developer
+          HOMEBREW_NO_AUTO_UPDATE=1 brew install pyenv;
+          eval "$(pyenv init -)";
+          pyenv install 3.8.2;
+          pyenv global 3.8.2;
+          pyenv rehash;
+          pip install cpp-coveralls;
+          pyenv rehash;
           git clone https://github.com/ryuichis/oclint
           cd oclint
           git checkout use-system-llvm
-          cd oclint-scripts
-          ./gh-actions test core
-          cd ..
-          coveralls --include oclint-core/ --exclude oclint-core/test;
+      - run: cd oclint-scripts && ./gh-actions test core && cd ..
+      - env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+        run: coveralls --gcov ./build/llvm-install/bin/llvm-cov --gcov-options gcov --include oclint-core/ --exclude oclint-core/test
