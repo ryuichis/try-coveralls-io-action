@@ -23,4 +23,4 @@ jobs:
           cd oclint-scripts
           ./gh-actions test core
           cd ..
-          coveralls --gcov ./build/llvm-install/bin/llvm-cov --gcov-options gcov --include oclint-core/ --exclude oclint-core/test
+          coveralls --gcov $(pwd)/build/llvm-install/bin/llvm-cov --gcov-options gcov --include oclint-core/ --exclude oclint-core/test
