@@ -7,7 +7,9 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - run: sudo pip install --upgrade cpp-coveralls;
-      - run: |
+      - env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+        run: |
           git clone https://github.com/ryuichis/oclint
           cd oclint
           git checkout use-system-llvm
