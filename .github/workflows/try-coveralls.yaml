@@ -32,7 +32,7 @@ jobs:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
           TRAVIS_JOB_ID: ${{ github.run_number }}
         run: |
-          apt-get install -y lcov
+          sudo apt-get install -y lcov
           cd oclint
           lcov --capture --directory build/oclint-${MODULE}-test --output-file lcov.info
           lcov --extract lcov.info '*oclint-${MODULE}/*' --output-file lcov.info
