@@ -10,13 +10,6 @@ jobs:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
         run: |
           sudo xcode-select -s /Applications/Xcode_12.2.app/Contents/Developer
-          HOMEBREW_NO_AUTO_UPDATE=1 brew install pyenv;
-          eval "$(pyenv init -)";
-          pyenv install 3.8.2;
-          pyenv global 3.8.2;
-          pyenv rehash;
-          pip install cpp-coveralls;
-          pyenv rehash;
           git clone https://github.com/ryuichis/oclint
           cd oclint
           git checkout use-system-llvm
@@ -27,6 +20,12 @@ jobs:
       - env:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
         run: |
-          pyenv rehash
+          HOMEBREW_NO_AUTO_UPDATE=1 brew install pyenv;
+          eval "$(pyenv init -)";
+          pyenv install 3.8.2;
+          pyenv global 3.8.2;
+          pyenv rehash;
+          pip install cpp-coveralls;
+          pyenv rehash;
           cd oclint
           coveralls --gcov $(pwd)/build/llvm-install/bin/llvm-cov --gcov-options gcov --include oclint-core/ --exclude oclint-core/test
