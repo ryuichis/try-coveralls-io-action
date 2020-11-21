@@ -101,4 +101,8 @@ jobs:
       - uses: actions/checkout@v1
       - run: sudo xcode-select -s /Applications/Xcode_12.2.app/Contents/Developer
       - run: HOMEBREW_NO_AUTO_UPDATE=1 brew install llvm@11
-      - run: cd oclint-scripts && ./gh-actions system-llvm "/usr/local/Cellar/llvm/11.0.0"
+      - run: |
+          git clone https://github.com/ryuichis/oclint
+          cd oclint
+          git checkout use-system-llvm
+          cd oclint-scripts && ./gh-actions system-llvm "/usr/local/Cellar/llvm/11.0.0"
