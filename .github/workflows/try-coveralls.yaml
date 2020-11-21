@@ -105,4 +105,6 @@ jobs:
           git clone https://github.com/ryuichis/oclint
           cd oclint
           git checkout use-system-llvm
-          cd oclint-scripts && ./gh-actions system-llvm "/usr/local/Cellar/llvm/11.0.0"
+          cd oclint-scripts
+          ./build -no-ninja -llvm-root=/usr/local/Cellar/llvm/11.0.0
+          ./bundle -archive -llvm-root=/usr/local/Cellar/llvm/11.0.0
