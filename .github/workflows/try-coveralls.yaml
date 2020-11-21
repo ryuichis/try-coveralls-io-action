@@ -7,5 +7,11 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - run: sudo pip install --upgrade cpp-coveralls;
-      - run: cd oclint-scripts && ./gh-actions test core && cd ..
-      - run: coveralls --include oclint-core/ --exclude oclint-core/test;
+      - run: |
+          git clone https://github.com/ryuichis/oclint
+          cd oclint
+          git checkout use-system-llvm
+          cd oclint-scripts
+          ./gh-actions test core
+          cd ..
+          coveralls --include oclint-core/ --exclude oclint-core/test;
