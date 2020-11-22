@@ -114,7 +114,7 @@ jobs:
       - run: |
           git clone https://github.com/oclint/oclint
           cd oclint
-          cd oclint-scripts && ./make
+          cd oclint-scripts && ./make && ./bundle -archive -release
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
