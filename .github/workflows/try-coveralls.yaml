@@ -94,24 +94,32 @@ jobs:
 #       uses: coverallsapp/github-action@master
 #       with:
 #         github-token: ${{ secrets.github_token }}
-#         parallel-finished: true
-  dry-build-on-mac:
-    runs-on: macos-10.15
+#         parallel-finished: truerelease:
+  release:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-20.04, macos-10.15]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v1
       - run: |
-          mkdir build
-          cd build
-          mkdir mock-release
-          touch mock-release/a.txt
-          touch mock-release/b.txt
-          tar czvf mock-release-abc.tar.gz mock-release/
-      - name: Configure AWS credentials from Test account
+          sudo apt-get update
+          sudo apt-get install -y ninja-build
+        if: matrix.os == 'ubuntu-20.04'
+      - run: |
+          sudo xcode-select -s /Applications/Xcode_12.2.app/Contents/Developer
+          brew install ninja
+        if: matrix.os == 'macos-10.15'
+      - run: |
+          git clone https://github.com/oclint/oclint
+          cd oclint
+          cd oclint-scripts && ./make
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-      - name: Copy files to the test website with the AWS CLI
-        run: |
-          aws s3 cp build/ s3://travisci-artifacts.oclint.org/${GITHUB_REPOSITORY}/${GITHUB_RUN_ID}/${GITHUB_ACTION} --recursive --exclude "*" --include "mock-*.tar.gz"
+      - name: Copy artifacts to AWS S3
+        run: aws s3 cp oclint/build/ s3://travisci-artifacts.oclint.org/${GITHUB_REPOSITORY}/gh-release-${GITHUB_RUN_ID} --recursive --exclude "*" --include "oclint-*.tar.gz"
